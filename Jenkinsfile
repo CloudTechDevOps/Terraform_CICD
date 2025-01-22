@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     stages {
-        stage('clone') {
-            steps {
-              git clone
-            }
-        }
+        // stage('clone') {
+        //     steps {
+        //       git clone
+        //     }
+        // }
         stage('init') {
             steps {
                 sh 'terraform init'
