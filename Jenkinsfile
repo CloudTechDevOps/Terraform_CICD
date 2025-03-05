@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('clone') {
             steps {
-              git branch: 'main', url: 'https://github.com/CloudTechDevOps/Terraform_CICD.git'
+              // git branch: 'main', url: 'https://github.com/CloudTechDevOps/Terraform_CICD.git'
             }
         }
         stage('init') {
