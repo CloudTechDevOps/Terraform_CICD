@@ -6,17 +6,17 @@ on:
     branches:
       - main                # Trigger on push to main branch
 
-env:
-  TF_DIR: ./Day-2-introduction   # 📁 Terraform directory path
+# env:
+#   TF_DIR: ./Day-2-introduction   # 📁 Terraform directory path
 
 jobs:
   terraform:
     name: Terraform Workflow
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ${{ env.TF_DIR }}
+    # defaults:
+    #   run:
+    #     working-directory: ${{ env.TF_DIR }}
 
     steps:
       - name: 📦 Checkout Code
