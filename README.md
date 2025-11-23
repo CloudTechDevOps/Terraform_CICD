@@ -7,3 +7,8 @@ CICD - Contineous Integration Contineous Delivery
 CICD - Contineous Integration Contineous Deplayment
 
 <img width="2153" height="1056" alt="cicd automation" src="https://github.com/user-attachments/assets/fff1bb50-8c40-4968-8907-6a5ee60ae505" />
+
+
+👉 It’s the practice of automatically building, testing, and deploying code changes to deliver software faster and safer.
+
+
