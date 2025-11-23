@@ -1,4 +1,6 @@
 👉 It’s the practice of automatically building, testing, and deploying code changes to deliver software faster and safer.
+
+
 CICD - Contineous Integration Contineous Delivery
 
 <img width="2153" height="1056" alt="cicd manuall" src="https://github.com/user-attachments/assets/3dcfdb7b-10bc-43b6-8b6f-7b814de78a72" />
