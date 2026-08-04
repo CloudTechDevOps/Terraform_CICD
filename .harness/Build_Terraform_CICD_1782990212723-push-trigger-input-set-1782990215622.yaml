@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_Terraform_CICD_1782990212723-push-trigger-input-set
+  identifier: Build_Terraform_CICD_1782990212723pushtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: multicloud
+  pipeline:
+    identifier: Build_Terraform_CICD_1782990212723
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>

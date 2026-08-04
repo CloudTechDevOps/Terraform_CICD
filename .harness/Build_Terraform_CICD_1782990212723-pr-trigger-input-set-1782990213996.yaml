@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_Terraform_CICD_1782990212723-pr-trigger-input-set
+  identifier: Build_Terraform_CICD_1782990212723prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: multicloud
+  pipeline:
+    identifier: Build_Terraform_CICD_1782990212723
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>

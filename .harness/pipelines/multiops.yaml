@@ -1,0 +1,157 @@
+pipeline:
+  name: multiops
+  identifier: Build_Terraform_CICD_1782990212723
+  projectIdentifier: multicloud
+  orgIdentifier: default
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.veeraops
+        repoName: Terraform_CICD
+        build:
+          type: branch
+          spec:
+            branch: main
+  stages:
+    - stage:
+        name: Terraform_Init
+        identifier: Terraform_Init
+        type: CI
+        spec:
+          cloneCodebase: true
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Terraform Init
+                  identifier: terraform_init
+                  spec:
+                    shell: Sh
+                    image: hashicorp/terraform:1.8.5
+                    envVariables:
+                      AWS_ACCESS_KEY_ID: <+secrets.getValue("AWS_ACCESS_KEY_ID")>
+                      AWS_SECRET_ACCESS_KEY: <+secrets.getValue("AWS_SECRET_ACCESS_KEY")>
+                      AWS_DEFAULT_REGION: us-east-1
+                    command: |
+                      terraform version
+                      pwd
+                      ls -la
+                      find . -name "*.tf"
+                      terraform init -input=false
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+    - stage:
+        name: Terraform_Plan
+        identifier: Terraform_Plan
+        type: CI
+        spec:
+          cloneCodebase: true
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Terraform Init
+                  identifier: terraform_init_plan
+                  spec:
+                    shell: Sh
+                    image: hashicorp/terraform:1.8.5
+                    envVariables:
+                      AWS_ACCESS_KEY_ID: <+secrets.getValue("AWS_ACCESS_KEY_ID")>
+                      AWS_SECRET_ACCESS_KEY: <+secrets.getValue("AWS_SECRET_ACCESS_KEY")>
+                      AWS_DEFAULT_REGION: us-east-1
+                    command: |
+                      terraform init -input=false
+              - step:
+                  type: Run
+                  name: Terraform Validate
+                  identifier: terraform_validate
+                  spec:
+                    shell: Sh
+                    image: hashicorp/terraform:1.8.5
+                    command: |
+                      terraform validate
+              - step:
+                  type: Run
+                  name: Terraform Plan
+                  identifier: terraform_plan
+                  spec:
+                    shell: Sh
+                    image: hashicorp/terraform:1.8.5
+                    envVariables:
+                      AWS_ACCESS_KEY_ID: <+secrets.getValue("AWS_ACCESS_KEY_ID")>
+                      AWS_SECRET_ACCESS_KEY: <+secrets.getValue("AWS_SECRET_ACCESS_KEY")>
+                      AWS_DEFAULT_REGION: us-east-1
+                    command: |
+                      terraform plan -out=tfplan
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+    - stage:
+        name: Approval
+        identifier: Approval
+        type: Approval
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: HarnessApproval
+                  name: Approve Terraform Apply
+                  identifier: approve_apply
+                  timeout: 1d
+                  spec:
+                    approvalMessage: |
+                      Terraform Plan completed successfully.
+                      Please review the Terraform plan and approve to continue.
+                    includePipelineExecutionHistory: true
+                    approvers:
+                      minimumCount: 1
+                      disallowPipelineExecutor: false
+                      userGroups:
+                        - account._account_all_users
+    - stage:
+        name: Terraform_Apply
+        identifier: Terraform_Apply
+        type: CI
+        spec:
+          cloneCodebase: true
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Terraform Init
+                  identifier: terraform_init_apply
+                  spec:
+                    shell: Sh
+                    image: hashicorp/terraform:1.8.5
+                    envVariables:
+                      AWS_ACCESS_KEY_ID: <+secrets.getValue("AWS_ACCESS_KEY_ID")>
+                      AWS_SECRET_ACCESS_KEY: <+secrets.getValue("AWS_SECRET_ACCESS_KEY")>
+                      AWS_DEFAULT_REGION: us-east-1
+                    command: |
+                      terraform init -input=false
+              - step:
+                  type: Run
+                  name: Terraform Apply
+                  identifier: terraform_apply
+                  spec:
+                    shell: Sh
+                    image: hashicorp/terraform:1.8.5
+                    envVariables:
+                      AWS_ACCESS_KEY_ID: <+secrets.getValue("AWS_ACCESS_KEY_ID")>
+                      AWS_SECRET_ACCESS_KEY: <+secrets.getValue("AWS_SECRET_ACCESS_KEY")>
+                      AWS_DEFAULT_REGION: us-east-1
+                    command: |
+                      terraform apply -auto-approve
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
